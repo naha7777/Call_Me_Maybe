@@ -1,8 +1,10 @@
 import argparse
 
+
 class ArgumentParser(argparse.ArgumentParser):
-    def error(self, message:str) -> None:
+    def error(self, message: str) -> None:
         raise ValueError(message)
+
 
 def parse_args() -> argparse.Namespace:
     parser = ArgumentParser()
