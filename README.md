@@ -6,8 +6,6 @@
 
 - ne pas laisser le dossier output, il sera genere pendant l'evaluation
 
-jcrois faut le faire dans le sgoinfre
-
 LLM = machine qui a lu tout internet et capable de deviner la fin des phrases : "le ciel est ..." le modele devine "bleu"
 => fait des statistiques
 
@@ -76,6 +74,7 @@ installation, and/or execution.
 ### Documentation
 - argparse : https://www.datacamp.com/tutorial/python-argparse
 - uv : https://www.datacamp.com/fr/tutorial/python-uv?dc_referrer=https%3A%2F%2Fwww.google.com%2F
+- machine d'etat : https://developer.mozilla.org/fr/docs/Glossary/State_machine
 
 ### AI usage
 
