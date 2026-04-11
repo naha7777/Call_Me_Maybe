@@ -2,28 +2,27 @@ SRC = src/
 
 FLAGS = --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
+.PHONY: install run debug clean lint lint-strict
+
 install:
-		uv venv --python 3.10
-		uv add --dev flake8 mypy
+	chmod +x install_env.sh
+	bash install_env.sh
 
 run:
-		uv sync
-		uv run python3 -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json
+	export HF_HOME="/goinfre/$(USER)/hf-cache" && \
+	export TRANSFORMERS_CACHE="/goinfre/$(USER)/hf-cache" && \
+	export UV_CACHE_DIR="/goinfre/$(USER)/uv-cache" && \
+	uv run python -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json
 
 debug:
-		uv sync
-		uv run python3 -m pdb src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json
+	export HF_HOME="/goinfre/$(USER)/hf-cache" && \
+	export TRANSFORMERS_CACHE="/goinfre/$(USER)/hf-cache" && \
+	uv run python -m pdb -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json
 
 clean:
-		find . -type d -name "__pycache__" -exec rm -rf {} +
-		find . -type d -name ".mypy_cache" -exec rm -rf {} +
-		find . -type d -name ".ruff_cache" -exec rm -rf {} +
-		find . -name "*.pyc" -delete
-
-fclean: clean
-		rm -rf .venv
-		rm -f uv.lock
-		rm -f maze.txt
+	find . -type d -name "__pycache__" -exec rm -rf {} +
+	find . -type d -name ".mypy_cache" -exec rm -rf {} +
+	find . -name "*.pyc" -delete
 
 lint:
 		@clear
@@ -38,8 +37,3 @@ lint-strict:
 		uv run flake8 $(SRC) || status=$$?; \
 		uv run mypy $(SRC) $(FLAGS) --strict || status=$$?; \
 		exit $$status
-
-help:
-		python3 -m src --help
-
-.PHONY: install run debug clean fclean lint lint-strict help

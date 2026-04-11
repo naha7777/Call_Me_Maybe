@@ -54,7 +54,10 @@ Le modele doit comprendre ce que l'utilisateur veut, choisir la bonne fonction p
 == Parsing progressif : suivre ou on en est dans la structure JSON et decider ce qui est OK ou non.
 
 
+machine d'etat
 
+installer llm et comprendre comment il communique notamment encode et decode
+savoir les tokens des symboles importants
 
 
 _This project has been created as part of the 42 curriculum by anacharp_

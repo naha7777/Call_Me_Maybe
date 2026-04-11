@@ -2,15 +2,18 @@ from json import JSONDecodeError
 from src.args import parse_args
 from src.parser.p_parser import p_parser
 from src.parser.f_parser import f_parser
-# from src.functions_parser.f_parser import f_parser
-# from llm_sdk import Small_LLM_Model
+from llm_sdk import Small_LLM_Model
 
 
 def main() -> None:
+
     try:
         args = parse_args()
         p_parser(args.input)
         f_parser(args.functions_definition)
+        model = Small_LLM_Model()
+        cloche = model.encode("fn_reverse_strin")
+        print(cloche)
 
     except (ValueError, PermissionError, FileNotFoundError, KeyboardInterrupt,
             KeyError, JSONDecodeError, Exception) as e:

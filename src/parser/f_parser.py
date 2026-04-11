@@ -10,11 +10,36 @@ valid_types = {"number", "string", "boolean", "integer", "array", "object",
                "null"}
 
 
+def check_doubles(file: str, readding: list[dict]) -> None:
+    with open(file, "r") as f:
+        readed = f.read()
+
+    count_name = 0
+    count_des = 0
+    count_param = 0
+    count_re = 0
+    lines = readed.split("\n")
+    for line in lines:
+        if '"name"' in line:
+            if '"name": "' in line:
+                count_name += 1
+            else:
+                pass
+        if '"description"' in line:
+                count_des += 1
+        if '"parameters"' in line:
+            count_param += 1
+        if '"returns"' in line:
+            count_re += 1
+    count_list = [count_name, count_des, count_param, count_re]
+    for count in count_list:
+        if count != len(readding):
+            raise ValueError("Duplicate key")
+
+
 def f_parser(file: str) -> None:
     readding = read_file(file)
     for r in readding:
-        print(r)
-        print( )
         if len(list(r.keys())) != len(set(r.keys())):
             raise ValueError("Duplicate keys")
         if mandatory_keys != list(r.keys()):
@@ -52,6 +77,10 @@ def f_parser(file: str) -> None:
                 raise ValueError(f"Invalid key {ke}, put 'type'")
             if va not in valid_types:
                 raise ValueError(f"Invalid type: {va}")
+
+    check_doubles(file, readding)
+
+
 
 
 
