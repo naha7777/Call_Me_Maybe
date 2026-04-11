@@ -48,7 +48,7 @@ Le modele doit comprendre ce que l'utilisateur veut, choisir la bonne fonction p
 
 1- lire les fonctions dispos (function_definitions.json)
 2- lire les prompts (function_calling_tests.json)
-3- pour chaque prompt : encoder, demader au modele le score du prochain token, bloquer les tokens invalides, choisir le meilleur token, repeter jusqu'au JSON complet.
+3- pour chaque prompt : encoder, demander au modele le score du prochain token, bloquer les tokens invalides, choisir le meilleur token, repeter jusqu'au JSON complet.
 4- ecrire dans un JSON
 
 == Parsing progressif : suivre ou on en est dans la structure JSON et decider ce qui est OK ou non.
