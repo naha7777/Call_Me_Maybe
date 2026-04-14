@@ -22,7 +22,7 @@ On choisit le token avec le score le plus eleve, on l'ajoute au texte, et on rec
 JSON = format tes strict = PROBLEME si on laise le modele ecrire librement il va ecrire n'importe quoi.
 Qwen 0.6B est un petit modele reussissant a produire du JSON seulement 30% du temps.
 
-Donc -> CONSTRAINED DECODING = au lieu de laisser le modele choisir librement il faut bloquer les mauvais tokens avant qu'il choisisse. POur ca on met le score des tokens invalides a -infini pour qu'il ne soit JAMAIS choisi.
+Donc -> CONSTRAINED DECODING = au lieu de laisser le modele choisir librement il faut bloquer les mauvais tokens avant qu'il choisisse. Pour ca on met le score des tokens invalides a -infini pour qu'il ne soit JAMAIS choisi.
 Exemple : le modele vient d'ecrire "{" donc les seuls tokens valides maintenant sont les noms des cles JSON possibles : name, parameters..., il faut bloquer tout le reste.
 
 Tensor = tableau des nombres = format que les biblis d'IA utilisent.
@@ -49,13 +49,49 @@ Le modele doit comprendre ce que l'utilisateur veut, choisir la bonne fonction p
 3- pour chaque prompt : encoder, demander au modele le score du prochain token, bloquer les tokens invalides, choisir le meilleur token, repeter jusqu'au JSON complet.
 4- ecrire dans un JSON
 
-== Parsing progressif : suivre ou on en est dans la structure JSON et decider ce qui est OK ou non.
+
+machine d'etat : pour savoir a chaque instant ou on en est dans la generation du JSON :
+ÉTAT: début          → seul token valide : "{"
+ÉTAT: clé fonction   → seuls tokens valides : "fn_add_numbers", "fn_greet"...
+ÉTAT: séparateur     → seul token valide : ":"
+ÉTAT: valeur param a → seuls tokens valides : digits ("2", "3", "4"...)
+ÉTAT: fin            → seul token valide : "}"
+
+---------------------------------------------------------------------------------------
+FONCTION POUR CREER L'OUTPUT :
+met tout dans une string et a la fin with open(data/input/.., "w") as f : json.dump(string, f, indent=4)
 
 
-machine d'etat
+on donne la liste de prompts au LLM au debut ?
+machine d'etat sur debut : on autorise comme seul token un certain token
 
-installer llm et comprendre comment il communique notamment encode et decode
-savoir les tokens des symboles importants
+
+avant de faire la machine d'etat on transforme tout le necessaire en token
+
+
+ETAPE 1 :
+tokeniser tout ce qui va etre utile:
+- "{"
+- les noms des fonctions
+- les noms des parametres
+- les trucs importants du JSON : ":", ",", "}", '"' etc
+- les digits de 0 a 9, ".", "-"
+
+PROBLEME : les noms de fonctions vont surement etres divises en plusieurs tokens
+ex: fn_add_numbers = fn, add, numbers : 3 tokens
+donc apres avoir choisi fn il faut forcer add et numbers
+Mais ils commencent tous par fn
+Donc prendre les 3 avec les meilleurs scores ?---------------------------------------
+
+==utiliser get_path_to_vocab_file() -> au lieu de tokeniser chaque string a la main, je charge le vocabulaire entier et je fais la correspondance token_id -> string directement
+
+ETAPE 2: BOUCLE
+J'envois les prompts au LLM des le debut, et en fonction de l'etat de ma machine d'etat j'autorise des tokens ou non.
+Quand je suis arrivee a la derniere etape de ma machine d'etat, je peux passer au prompt suivant dans ma liste de prompts et repartir du debut dans ma liste d'etat
+
+Reste plus qu'a savoir si ma machine trouve bien la bonne fonction avec ce prompt ou si je vais plus galerer avec le prompt mais au pire je changerai le prompt donc je peux avancer comme ca
+--------------------------------------------------------------------------------------
+
 
 
 _This project has been created as part of the 42 curriculum by anacharp_

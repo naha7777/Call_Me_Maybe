@@ -6,7 +6,7 @@ def read_file(file: str) -> list[dict[str: str]]:
         return json.load(f)
 
 
-def p_parser(file: str) -> None:
+def p_parser(file: str) -> list[dict]:
     readding = read_file(file)
     for line in readding:
         if "prompt" not in line:
@@ -14,3 +14,4 @@ def p_parser(file: str) -> None:
         for k, v in line.items():
             if not isinstance(v, str):
                 raise ValueError("prompt value must be a string")
+    return readding
