@@ -2,3 +2,4 @@ src/__pycache__
 src/parser/__pycache__
 .venv
 src/prompt/__pycache__
+src/generate/__pycache__
