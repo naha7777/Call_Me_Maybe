@@ -41,18 +41,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-
-# json.dumps() envoit en json bien
-
-
-# on recupere une liste de prompt a envoyer au LLM un par un
-# on envoie les elements de la liste un par un
-
-# on doit construire la machine d'etat
-
-# faire tous les trucs de tokens pour qu'il complete le prompt
-
-# la machine d'etat permet de savoir ou on en est dans le JSON pour savoir
-# quels tokens sont interdits: par exemple si on est au debut du JSON le seul
-# token autorise c'est celui qui correspond a "["

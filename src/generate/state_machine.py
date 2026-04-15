@@ -1,6 +1,10 @@
 def state_machine(state: str, prompt: str, model, vocab_data) -> list:
     if state == "start":
         return ([vocab_data["{"]])
+    elif state == "first":
+        return ([vocab_data["["]])
+    elif state == "final":
+        return ([vocab_data["]"]])
     elif state == "quotation_marks":
         return ([vocab_data['"']])
     elif state == "prompt":
@@ -28,4 +32,12 @@ def state_machine(state: str, prompt: str, model, vocab_data) -> list:
         return (function_lst)
     elif state == "end":
         return ([vocab_data["}"]])
-    # elif state == "param":
+    elif state == "param":
+        param_lst = []
+        lst = 'abcdefghijklmnopqrstuvwxyz0123456789}.",:{ '
+        for c in lst:
+            if c in vocab_data:
+                param_lst.append(vocab_data[c])
+            else:
+                param_lst.append([220])
+        return param_lst
