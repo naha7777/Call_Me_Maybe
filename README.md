@@ -111,6 +111,8 @@ installation, and/or execution.
 - argparse : https://www.datacamp.com/tutorial/python-argparse
 - uv : https://www.datacamp.com/fr/tutorial/python-uv?dc_referrer=https%3A%2F%2Fwww.google.com%2F
 - machine d'etat : https://developer.mozilla.org/fr/docs/Glossary/State_machine
+- json https://www.geeksforgeeks.org/python/json-dump-in-python/
+- https://dev.to/ericlecodeur/python-manipulation-des-dossiers-et-fichiers-nji
 
 ### AI usage
 

@@ -7,17 +7,12 @@ def create_prompt(function_calling: list[dict],
     prompts = []
     for prompt in function_calling:
         user_prompt = ""
-        user_prompt += f"{fn_p}\n"
-        user_prompt += f"Input: '{prompt['prompt']}'\nThe function to call is:"
+        user_prompt = "You are a helpful assistant that outputs only JSON.\n"
+        user_prompt += "Available functions:\n"
+        user_prompt += f"{fn_p}\n\n"
+        user_prompt += "Example:\n"
+        user_prompt += f"Input: '{prompt['prompt']}'\n"
+        user_prompt += f'Output: "prompt": {prompt["prompt"]}, "name": "fn_add_numbers", "parameters": "a": 2.0, "b": 3.0\n\n'
+        user_prompt += "Find the write function for the prompt"
         prompts.append(user_prompt)
     return (prompts)
-
-# appelle la function prompt qui renvoie une grosse string
-# dans cette grosse string on a chaque nom de fonction : sa description et
-# ses parametres
-# ensuite on appelle la user prompt
-# la user prompt renvoie une list de prompt
-# pour chaque prompt, on ecrit genre Input: prompt, The function to call is
-
-# ici on renvoie une liste avec a chaque fois les fonctions possibles et en
-# dessous le prompt de l'user et la phrase que doit completer le LLM
