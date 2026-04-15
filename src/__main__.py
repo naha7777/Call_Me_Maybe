@@ -1,9 +1,9 @@
 from json import JSONDecodeError
-from src.args import parse_args
+from src.parser.args import parse_args
 from src.parser.p_parser import p_parser
 from src.parser.f_parser import f_parser
 from src.prompt.create_prompt import create_prompt
-from src.generation import generation
+from src.generate.generation import generation
 from llm_sdk import Small_LLM_Model
 import json
 

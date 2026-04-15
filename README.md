@@ -90,7 +90,7 @@ J'envois les prompts au LLM des le debut, et en fonction de l'etat de ma machine
 Quand je suis arrivee a la derniere etape de ma machine d'etat, je peux passer au prompt suivant dans ma liste de prompts et repartir du debut dans ma liste d'etat
 
 Reste plus qu'a savoir si ma machine trouve bien la bonne fonction avec ce prompt ou si je vais plus galerer avec le prompt mais au pire je changerai le prompt donc je peux avancer comme ca
---------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
 
 
 

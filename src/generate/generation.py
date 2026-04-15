@@ -1,20 +1,20 @@
-from src.state_machine import state_machine
+from src.generate.state_machine import state_machine
 import torch
+
 
 def create_states() -> list:
     return (["start", "quotation_marks", "prompt", "quotation_marks",
-            "two_points", "space", "quotation_marks", "string", "comma",
-            "quotation_marks", "name", "quotation_marks", "two_points",
-            "space", "quotation_marks", "function", "quotation_marks", "comma",
-            "quotation_marks", "parameters", "quotation_marks", "two_points"])
-            #  "param", "end", "comma"])
+             "two_points", "space", "quotation_marks", "string", "comma",
+             "quotation_marks", "name", "quotation_marks", "two_points",
+             "space", "quotation_marks", "function", "quotation_marks",
+             "comma", "quotation_marks", "parameters", "quotation_marks",
+             "two_points", "param", "end", "comma"])
 
 
 def generation(prompt, model, vocab_data) -> None:
     encode = model.encode(prompt)[0].tolist()
     states = create_states()
     ids = []
-    decode = ""
     fixed_states = ["start", "quotation_marks", "prompt", "two_points",
                     "space", "comma", "name", "parameters", "end"]
 
@@ -27,13 +27,21 @@ def generation(prompt, model, vocab_data) -> None:
             ids.append(best_token_id)
             decode = model.decode(ids)
             print(decode)
+
         elif state == "function":
             no_boucle = []
             functions_names = []
             split_prompt = prompt.split("\n")
             for p in split_prompt:
                 pr = p.split(":")
-                functions_names.append(pr[0])
+                if pr[0].startswith("You") or pr[0].startswith("Available") \
+                   or pr[0].startswith("Input") or pr[0].startswith("Output"):
+                    continue
+                if pr[0].startswith("Example") or pr[0].startswith(" ") \
+                   or not pr[0] or pr[0].startswith("Find"):
+                    continue
+                else:
+                    functions_names.append(pr[0])
             best_id = None
             while True:
                 logits = model.get_logits_from_input_ids(encode+ids)
@@ -54,6 +62,7 @@ def generation(prompt, model, vocab_data) -> None:
                 ids.append(best_id)
                 decode = model.decode(ids)
                 print(decode)
+
         elif state == "string":
             i = 0
             sp_pr = prompt.split("\n")
