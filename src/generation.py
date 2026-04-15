@@ -25,6 +25,8 @@ def generation(prompt, model, vocab_data) -> None:
             scores = {token_id: logits[token_id] for token_id in valid_tokens}
             best_token_id = max(scores, key=lambda t: scores[t])
             ids.append(best_token_id)
+            decode = model.decode(ids)
+            print(decode)
         elif state == "function":
             no_boucle = []
             functions_names = []
@@ -50,6 +52,8 @@ def generation(prompt, model, vocab_data) -> None:
                     break
                 no_boucle.append(best_id)
                 ids.append(best_id)
+                decode = model.decode(ids)
+                print(decode)
         elif state == "string":
             i = 0
             sp_pr = prompt.split("\n")
@@ -71,6 +75,7 @@ def generation(prompt, model, vocab_data) -> None:
                 else:
                     ids.append(1)
                     break
-
-        decode = model.decode(ids)
-        print(decode)
+                decode = model.decode(ids)
+                print(decode)
+        elif state == "param":
+            pass
