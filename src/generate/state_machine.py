@@ -34,8 +34,7 @@ def state_machine(state: str, prompt: str, model, vocab_data) -> list:
         return ([vocab_data["}"]])
     elif state == "param":
         param_lst = []
-        lst = 'abcdefghijklmnopqrstuvwxyz0123456789}.",:{ '
-        for c in lst:
+        for c in prompt:
             if c in vocab_data:
                 param_lst.append(vocab_data[c])
             else:

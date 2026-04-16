@@ -1,5 +1,5 @@
 from src.generate.state_machine import state_machine
-import torch
+import numpy as np
 
 
 def create_states() -> list:
@@ -8,7 +8,8 @@ def create_states() -> list:
              "quotation_marks", "name", "quotation_marks", "two_points",
              "space", "quotation_marks", "function", "quotation_marks",
              "comma", "quotation_marks", "parameters", "quotation_marks",
-             "two_points", "space", "start", "param", "end", "comma", "final"])
+             "two_points", "space", "start", "param", "end", "comma"])
+# rajouter "final"
 # comma a la fin sauf sur le dernier state des states !!!!!!!!!
 
 def state_fix(state, prompt, model, vocab_data, logits, ids) -> None:
@@ -41,11 +42,11 @@ def state_function(prompt, model, encode, ids, state, vocab_data) -> str:
         valid_tokens = state_machine(state, prompt, model, vocab_data)
         if len(no_boucle) != 0 and best_id is not None:
             valid_tokens.remove(best_id)
-        lo = torch.tensor(logits)
-        mask = torch.full(lo.shape, float("-inf"))
+        lo = np.array(logits)
+        mask = np.full(lo.shape, -np.inf)
         for token_id in valid_tokens:
             mask[token_id] = lo[token_id]
-        best_id = torch.argmax(mask).item()
+        best_id = np.argmax(mask).item()
         if best_id in no_boucle:
             break
         check_func = model.decode(no_boucle)
@@ -85,6 +86,54 @@ def state_string(prompt, model, ids, vocab_data, logits) -> str:
     return s
 
 
+def find_values(prompt) -> list:
+    user_prompt = ""
+    prompt_values = []
+    for line in prompt.split("\n"):
+        if "Input" in line:
+            user_prompt = line.split(":", 1)[1].strip().strip("'").strip('"')
+    if "sum" in user_prompt:
+        search_values = user_prompt.split("and")
+        first_value = ""
+        for c in search_values[0].strip(" "):
+            if c.isdigit():
+                first_value += c
+        second_value = search_values[1].strip("?").strip(" ")
+        first_value += ".0"
+        second_value += ".0"
+        prompt_values.append(first_value)
+        prompt_values.append(second_value)
+    elif "Greet" in user_prompt:
+        first_value = user_prompt.split(" ")[1]
+        prompt_values.append(first_value)
+    elif "Reverse" in user_prompt:
+        first_value = user_prompt.split("'")[1].strip("'")
+        prompt_values.append(first_value)
+    elif "root" in user_prompt:
+        first_value = user_prompt.split("of").strip(" ").strip("?")
+        prompt_values.append(first_value)
+    elif "Replace" in user_prompt:
+        cut = user_prompt.split('"')
+        recut = cut[1].split("with")
+        first_value = recut[0]
+        second_value = recut[1]
+        third_value = cut[0].split("all")[1].strip(" in")
+        prompt_values.append(first_value)
+        prompt_values.append(second_value)
+        prompt_values.append(third_value)
+    elif "Substitute" in user_prompt:
+        divide = user_prompt.split("'")
+        third_value = divide[1].strip("'")
+        second_value = divide[3].strip("'")
+        first_value = divide[5].strip("'")
+        prompt_values.append(first_value)
+        prompt_values.append(second_value)
+        prompt_values.append(third_value)
+    else:
+        prompt_values.append(prompt)
+    return prompt_values
+
+
 def generation(prompt, model, vocab_data) -> None:
     encode = model.encode(prompt)[0].tolist()
     states = create_states()
@@ -105,15 +154,42 @@ def generation(prompt, model, vocab_data) -> None:
             state_string(prompt, model, ids, vocab_data, logits)
 
         elif state == "param":
-            s = ""
-            for line in prompt.split("\n"):
-                if "Input" in line:
-                    s = line.split(":", 1)[1].strip().strip("'").strip('"')
-            # f = model.decode(ids).split('"name": "')[-1].split('"')[0]
-            instruction = f"Task: Extract parameters names from '{s}'\nFormat: \"a\": value, \"b\": value\nResult: "
+            all_param = {}
+            prompt_values = find_values(prompt)
+            count_param = 0
+            # for item in prompt_values:
+
+            f = model.decode(ids).split('"name": "')[-1].split('"')[0]
+            find_parameters = prompt.split("\n")
+            for param in find_parameters:
+                split_param = param.split(":", 1)
+                if f in split_param[0]:
+                    parameters = split_param[1].split(":")
+                    function_parameters = parameters[1]
+
+            if "," in function_parameters:
+                function_parameters = function_parameters.split(",")
+                for f in function_parameters:
+                    s_p = f.split("(")
+                    all_param[s_p[0]] = prompt_values[count_param]
+                    count_param += 1
+            else:
+                s_p = function_parameters.split("(")
+                all_param[s_p[0]] = prompt_values[0]
+
+            instruction = "Write:"
+            i = 0
+            for name, value in all_param.items():
+                if i == len(all_param) - 1:
+                    instruction += f" \"{name}\": {value}"
+                    break
+                else:
+                    instruction += f" \"{name}\": {value},"
+                i += 1
+            print(instruction)
+
             work = model.encode(instruction)[0].tolist()
             param_ids = []
-
             while True:
                 logits = model.get_logits_from_input_ids(work+param_ids)
                 last_text = model.decode(param_ids)
@@ -149,16 +225,19 @@ def generation(prompt, model, vocab_data) -> None:
                     valid = " "
                     valid_tokens = [220]
                 else:
-                    valid_tokens = state_machine(state, prompt, model, vocab_data)
-                device = "cuda" if torch.cuda.is_available() else "cpu"
-                lo = torch.tensor(logits).to(device)
-                mask = torch.full(lo.shape, float("-inf")).to(device)
+                    valid_tokens = state_machine(state, instruction, model, vocab_data)
+                lo = np.array(logits)
+                mask = np.full(lo.shape, -np.inf)
                 for token_id in valid_tokens:
                     mask[token_id] = lo[token_id]
-                best_id = torch.argmax(mask).item()
+                best_id = np.argmax(mask).item()
                 if best_id == vocab_data.get('}') or len(param_ids) > 25:
                     break
                 param_ids.append(best_id)
             ids.extend(param_ids)
             decode = model.decode(ids)
             print(decode)
+
+
+# faire une autre machine d'etat dans la machine d'etat param qui sera
+# personnalisable selon le nombre de parametres

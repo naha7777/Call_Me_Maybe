@@ -93,6 +93,8 @@ Reste plus qu'a savoir si ma machine trouve bien la bonne fonction avec ce promp
 -----------------------------------------------------------------------------------
 
 
+trouver dans la string les parameters_values et les associer au bon name, autoriser seulement ca a chaque etape.
+
 
 _This project has been created as part of the 42 curriculum by anacharp_
 
