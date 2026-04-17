@@ -1,8 +1,9 @@
 from src.prompt.function_prompt import function_prompt
+from typing import Any
 
 
-def create_prompt(function_calling: list[dict],
-                  functions_definitions: list[dict]) -> list[str]:
+def create_prompt(function_calling: list[dict[Any, Any]],
+                  functions_definitions: list[dict[Any, Any]]) -> list[str]:
     fn_p = function_prompt(functions_definitions)
     prompts = []
     for prompt in function_calling:

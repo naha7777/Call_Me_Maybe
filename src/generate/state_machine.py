@@ -1,4 +1,8 @@
-def state_machine(state: str, prompt: str, model, vocab_data) -> list:
+from llm_sdk.__init__ import Small_LLM_Model
+
+
+def state_machine(state: str, prompt: str, model: Small_LLM_Model,
+                  vocab_data: dict[str, int]) -> list:
     if state == "start":
         return ([vocab_data["{"]])
     elif state == "first":
@@ -40,3 +44,5 @@ def state_machine(state: str, prompt: str, model, vocab_data) -> list:
             else:
                 param_lst.append([220])
         return param_lst
+    else:
+        return []

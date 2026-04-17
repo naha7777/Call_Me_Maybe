@@ -1,29 +1,34 @@
-def check_name(r: dict) -> None:
-    if not isinstance(r.get("name"), str):
+from typing import Any
+
+
+def check_name(r: dict[Any, Any]) -> None:
+    get_name = r.get("name")
+    if not isinstance(get_name, str):
         raise ValueError(f"Invalid function name '{r.get('name')}',"
                          " put a string")
-    if not r.get("name").startswith("fn_"):
+    if not get_name.startswith("fn_"):
         raise ValueError("Invalid function name, function name must "
                          "start with 'fn_'")
-    if r.get("name") == "fn_":
+    if get_name == "fn_":
         raise ValueError("Invalid function name, 'fn_' is not a function"
                          " name, please put a clear function name after "
                          "'fn_'")
 
 
-def check_description(r: dict) -> None:
-    if not isinstance(r.get("description"), str):
+def check_description(r: dict[Any, Any]) -> None:
+    get_description = r.get("description")
+    if not isinstance(get_description, str):
         raise ValueError("Invalid function description"
                          f"'{r.get('description')}', put a string")
-    if not r.get("description") or not r.get("description").strip(" "):
+    if not get_description or not get_description.strip(" "):
         raise ValueError(f"Invalid description '{r.get('description')}',"
                          " write a clear description of the function")
-    if len(r.get("description")) < 20:
+    if len(get_description) < 20:
         raise ValueError("Invalid description, this description is too "
                          "short to be clear")
 
 
-def check_parameters(r: dict, valid_types: set[str]) -> None:
+def check_parameters(r: dict[Any, Any], valid_types: set[str]) -> None:
     param = r.get("parameters")
     if not isinstance(param, dict):
         raise ValueError(f"Invalid parameters '{param}', put a dict")
@@ -41,7 +46,7 @@ def check_parameters(r: dict, valid_types: set[str]) -> None:
                 raise ValueError(f"Invalid type: '{value}'")
 
 
-def check_returns(r: dict, valid_types: set[str]) -> None:
+def check_returns(r: dict[Any, Any], valid_types: set[str]) -> None:
     re = r.get('returns')
     if not isinstance(re, dict):
         raise ValueError(f"Invalid 'returns' value '{re}', put a dict")
@@ -56,7 +61,7 @@ def check_returns(r: dict, valid_types: set[str]) -> None:
             raise ValueError(f"Invalid type: '{va}'")
 
 
-def check_doubles(file: str, readding: list[dict]) -> None:
+def check_doubles(file: str, readding: list[dict[Any, Any]]) -> None:
     with open(file, "r") as f:
         readed = f.read()
 

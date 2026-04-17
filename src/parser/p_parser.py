@@ -1,12 +1,13 @@
 import json
+from typing import Any
 
 
-def read_file(file: str) -> list[dict[str: str]]:
+def read_file(file: str) -> Any:
     with open(file, "r") as f:
         return json.load(f)
 
 
-def p_parser(file: str) -> list[dict]:
+def p_parser(file: str) -> Any:
     readding = read_file(file)
     for line in readding:
         if "prompt" not in line:

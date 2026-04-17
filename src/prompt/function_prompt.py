@@ -1,4 +1,7 @@
-def function_prompt(functions_definitions: list[dict]) -> str:
+from typing import Any
+
+
+def function_prompt(functions_definitions: list[dict[Any, Any]]) -> str:
     prompt = ""
     for fn in functions_definitions:
         i = 0

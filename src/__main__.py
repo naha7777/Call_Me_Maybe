@@ -4,7 +4,7 @@ from src.parser.p_parser import p_parser
 from src.parser.f_parser import f_parser
 from src.prompt.create_prompt import create_prompt
 from src.generate.generation import generation
-from llm_sdk import Small_LLM_Model
+from llm_sdk.__init__ import Small_LLM_Model
 import json
 
 
@@ -24,12 +24,9 @@ def main() -> None:
         count = len(prompt_for_LLM)
         for prompt in prompt_for_LLM:
             i += 1
-            first_activate = generation(prompt, model, vocab_data, first_activate, count, i)
-            # print(i)
-            # print(count)
-        # generation(prompt_for_LLM[0])
+            first_activate = generation(prompt, model, vocab_data,
+                                        first_activate, count, i)
 
-        # string = [{"prompt": "WTF", "name": "fn_add_nb", "parameters": {"a": 2.0, "b": 3.0} },{"prompt": "WTF", "name": "fn_add_nb", "parameters": {"s": "hello"} }]
         # if not exists("data/output"):
         #     os.mkdir("data/output")
         # with open("data/output/function_calling_results.json", "w") as f:

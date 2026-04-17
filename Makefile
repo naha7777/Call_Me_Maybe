@@ -9,6 +9,7 @@ install:
 	bash install_env.sh
 
 run:
+	@clear
 	export HF_HOME="/goinfre/$(USER)/hf-cache" && \
 	export TRANSFORMERS_CACHE="/goinfre/$(USER)/hf-cache" && \
 	export UV_CACHE_DIR="/goinfre/$(USER)/uv-cache" && \
