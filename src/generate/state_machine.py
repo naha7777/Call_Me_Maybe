@@ -4,7 +4,7 @@ def state_machine(state: str, prompt: str, model, vocab_data) -> list:
     elif state == "first":
         return ([vocab_data["["]])
     elif state == "final":
-        return ([vocab_data["]"]])
+        return ([vocab_data["}]"]])
     elif state == "quotation_marks":
         return ([vocab_data['"']])
     elif state == "prompt":

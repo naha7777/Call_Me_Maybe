@@ -19,8 +19,14 @@ def main() -> None:
         vocab_path = model.get_path_to_vocab_file()
         with open(vocab_path, "r", encoding="utf-8") as f:
             vocab_data = json.load(f)
+        first_activate = False
+        i = 0
+        count = len(prompt_for_LLM)
         for prompt in prompt_for_LLM:
-            generation(prompt, model, vocab_data)
+            i += 1
+            first_activate = generation(prompt, model, vocab_data, first_activate, count, i)
+            # print(i)
+            # print(count)
         # generation(prompt_for_LLM[0])
 
         # string = [{"prompt": "WTF", "name": "fn_add_nb", "parameters": {"a": 2.0, "b": 3.0} },{"prompt": "WTF", "name": "fn_add_nb", "parameters": {"s": "hello"} }]
