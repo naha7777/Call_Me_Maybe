@@ -195,7 +195,7 @@ def find_values(prompt) -> list:
         prompt_values.append(second_value)
         prompt_values.append(third_value)
     else:
-        prompt_values.append(prompt)
+        prompt_values.append(user_prompt)
     return prompt_values
 
 
