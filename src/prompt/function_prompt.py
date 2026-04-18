@@ -2,6 +2,10 @@ from typing import Any
 
 
 def function_prompt(functions_definitions: list[dict[Any, Any]]) -> str:
+    """
+    Build a formatted string listing all available functions and their
+    parameters
+    """
     prompt = ""
     for fn in functions_definitions:
         i = 0

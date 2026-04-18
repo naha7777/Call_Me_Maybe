@@ -4,6 +4,7 @@ from typing import Any
 
 def state_machine(state: str, prompt: str, model: Small_LLM_Model,
                   vocab_data: dict[Any, Any]) -> list[int]:
+    """Return the list of valid token ids for the current FSM state"""
     if state == "start":
         return ([vocab_data["{"]])
     elif state == "first":

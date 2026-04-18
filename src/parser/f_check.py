@@ -2,6 +2,7 @@ from typing import Any
 
 
 def check_name(r: dict[Any, Any]) -> None:
+    """Validate the function name field"""
     get_name = r.get("name")
     if not isinstance(get_name, str):
         raise ValueError(f"Invalid function name '{r.get('name')}',"
@@ -16,6 +17,7 @@ def check_name(r: dict[Any, Any]) -> None:
 
 
 def check_description(r: dict[Any, Any]) -> None:
+    """Validate the function description field"""
     get_description = r.get("description")
     if not isinstance(get_description, str):
         raise ValueError("Invalid function description"
@@ -29,6 +31,7 @@ def check_description(r: dict[Any, Any]) -> None:
 
 
 def check_parameters(r: dict[Any, Any], valid_types: set[str]) -> None:
+    """Validate the parameters field and their types"""
     param = r.get("parameters")
     if not isinstance(param, dict):
         raise ValueError(f"Invalid parameters '{param}', put a dict")
@@ -47,6 +50,7 @@ def check_parameters(r: dict[Any, Any], valid_types: set[str]) -> None:
 
 
 def check_returns(r: dict[Any, Any], valid_types: set[str]) -> None:
+    """Validate the returns field and its type"""
     re = r.get('returns')
     if not isinstance(re, dict):
         raise ValueError(f"Invalid 'returns' value '{re}', put a dict")
@@ -62,6 +66,7 @@ def check_returns(r: dict[Any, Any], valid_types: set[str]) -> None:
 
 
 def check_doubles(file: str, readding: list[dict[Any, Any]]) -> None:
+    """Check for duplicate keys in the JSON file"""
     with open(file, "r") as f:
         readed = f.read()
 

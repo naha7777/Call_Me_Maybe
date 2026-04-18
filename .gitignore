@@ -4,3 +4,4 @@ src/parser/__pycache__
 src/prompt/__pycache__
 src/generate/__pycache__
 data/output/
+.mypy_cache

@@ -8,6 +8,7 @@ from typing import Any
 def state_fix(state: str, prompt: str, model: Small_LLM_Model,
               vocab_data: dict[str, int], logits: list[float],
               ids: list[int], visualizer: bool) -> Any:
+    """Pick the best valid token for a deterministic single-token state"""
     valid_tokens = state_machine(state, prompt, model, vocab_data)
     scores = {token_id: logits[token_id] for token_id in valid_tokens}
     best_token_id = max(scores, key=lambda t: scores[t])
@@ -21,6 +22,7 @@ def state_fix(state: str, prompt: str, model: Small_LLM_Model,
 def state_function(prompt: str, model: Small_LLM_Model, encode: list[str],
                    ids: list[int], state: str,
                    vocab_data: dict[str, int], visualizer: bool) -> None:
+    """Generate the function name token by token until a valid name is found"""
     no_boucle: list[int] = []
     functions_names = []
     split_prompt = prompt.split("\n")
@@ -60,6 +62,9 @@ def state_function(prompt: str, model: Small_LLM_Model, encode: list[str],
 def state_string(prompt: str, model: Small_LLM_Model, ids: list[int],
                  vocab_data: dict[str, int], logits: list[float],
                  visualizer: bool) -> None:
+    """
+    Generate a string argument character by character from the input prompt
+    """
     i = 0
     sp_pr = prompt.split("\n")
     for line in sp_pr:
@@ -88,6 +93,7 @@ def state_string(prompt: str, model: Small_LLM_Model, ids: list[int],
 
 def state_param(prompt: str, model: Small_LLM_Model, ids: list[int],
                 vocab_data: dict[str, int], visualizer: bool) -> None:
+    """Extract and encode all function parameters into the token id sequence"""
     all_name = {}
     prompt_values = find_values(prompt)
 

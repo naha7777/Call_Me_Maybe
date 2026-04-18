@@ -18,6 +18,9 @@ logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
 
 
 def main() -> None:
+    """
+    Run the full function calling pipeline from args parsing to JSON output
+    """
     try:
         visualizer = False
         start = time.time()
@@ -47,8 +50,8 @@ def main() -> None:
     except (ValueError, PermissionError, FileNotFoundError, KeyboardInterrupt,
             KeyError, JSONDecodeError, Exception) as e:
         print(f"\033[38;2;170;0;0;1mERROR: {e}\033[0m")
-        import traceback
-        traceback.print_exc()
+        # import traceback
+        # traceback.print_exc()
         exit(1)
 
 

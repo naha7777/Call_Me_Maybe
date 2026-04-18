@@ -3,11 +3,15 @@ from typing import Never
 
 
 class ArgumentParser(argparse.ArgumentParser):
+    """
+    Custom ArgumentParser that raises ValueError instead of calling sys.exit
+    """
     def error(self, message: str) -> Never:
         raise ValueError(message)
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse and validate command-line arguments"""
     parser = ArgumentParser()
 
     parser.add_argument("--functions_definition",

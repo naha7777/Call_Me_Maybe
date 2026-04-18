@@ -12,6 +12,10 @@ SAVE_GEN = []
 
 
 def create_states(nb_prompts: int, i: int) -> list[str]:
+    """
+    Return the FSM state sequence for the current prompt, with or without
+    trailing comma
+    """
     if i == nb_prompts:
         return (["first", "start", "quotation_marks", "prompt",
                  "quotation_marks", "two_points", "space", "quotation_marks",
@@ -31,6 +35,7 @@ def create_states(nb_prompts: int, i: int) -> list[str]:
 
 
 def json_gen(decode: list[str]) -> None:
+    """Assemble generated token strings into a JSON file"""
     if not Path("data/output").exists():
         os.mkdir("data/output")
     full_string = "".join(decode).strip()
@@ -42,6 +47,7 @@ def json_gen(decode: list[str]) -> None:
 def generation(prompt: str, model: Small_LLM_Model, vocab_data: dict[Any, Any],
                first_activate: bool, nb_prompts: int, i: int,
                visualizer: bool) -> bool:
+    """Run the constrained decoding loop over all FSM states for one prompt"""
     encode = model.encode(prompt)[0].tolist()
     states = create_states(nb_prompts, i)
     ids: list[int] = []

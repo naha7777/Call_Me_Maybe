@@ -4,6 +4,7 @@ from typing import Any
 
 def create_prompt(function_calling: list[dict[Any, Any]],
                   functions_definitions: list[dict[Any, Any]]) -> list[str]:
+    """Build a list of LLM prompts, one per input function call."""
     fn_p = function_prompt(functions_definitions)
     prompts = []
     for prompt in function_calling:

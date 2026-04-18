@@ -5,6 +5,7 @@ from typing import Any
 
 
 def read_file(file: str) -> Any:
+    """Read and parse a JSON file, returning its contents"""
     with open(file, "r") as f:
         return json.load(f)
 
@@ -15,6 +16,7 @@ valid_types = {"number", "string", "boolean", "integer", "array", "object",
 
 
 def f_parser(file: str) -> Any:
+    """Parse and validate the function definitions JSON file"""
     readding = read_file(file)
     for r in readding:
         if mandatory_keys != list(r.keys()):
