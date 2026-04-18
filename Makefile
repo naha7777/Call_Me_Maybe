@@ -13,19 +13,19 @@ run:
 	@export HF_HOME="/goinfre/$(USER)/hf-cache" && \
 	export TRANSFORMERS_CACHE="/goinfre/$(USER)/hf-cache" && \
 	export UV_CACHE_DIR="/goinfre/$(USER)/uv-cache" && \
-	uv run python -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json
+	uv run python -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calling_results.json
 
 visu:
 	@clear
 	@export HF_HOME="/goinfre/$(USER)/hf-cache" && \
 	export TRANSFORMERS_CACHE="/goinfre/$(USER)/hf-cache" && \
 	export UV_CACHE_DIR="/goinfre/$(USER)/uv-cache" && \
-	uv run python -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json --visualizer
+	uv run python -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calling_results.json --visualizer
 
 debug:
 	export HF_HOME="/goinfre/$(USER)/hf-cache" && \
 	export TRANSFORMERS_CACHE="/goinfre/$(USER)/hf-cache" && \
-	uv run python -m pdb -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json
+	uv run python -m pdb -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calling_results.json
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
