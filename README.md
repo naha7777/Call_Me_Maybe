@@ -1,9 +1,10 @@
--> checke warning
--> mettre dans .json
+<!-- -> check warning -->
+<!-- -> mettre dans .json -->
+-> ajouter time
 -> mypy
 -> ajouter l'option visualizer
 -> readme
--> supprimer l'output
+<!-- -> supprimer l'output -->
 -> le mettre sur le bon git
 -> check le sujet d'evaluation
 

@@ -6,10 +6,17 @@ from src.prompt.create_prompt import create_prompt
 from src.generate.generation import generation
 from llm_sdk.__init__ import Small_LLM_Model
 import json
+import os
+import logging
+
+
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
 
 
 def main() -> None:
-
     try:
         args = parse_args()
         function_calling = p_parser(args.input)
@@ -33,8 +40,6 @@ def main() -> None:
         import traceback
         traceback.print_exc()
         exit(1)
-    # print()
-    # print(args.output)
 
 
 if __name__ == "__main__":
