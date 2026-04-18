@@ -8,6 +8,7 @@ from llm_sdk.__init__ import Small_LLM_Model
 import json
 import os
 import logging
+import time
 
 
 os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
@@ -18,7 +19,11 @@ logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
 
 def main() -> None:
     try:
+        visualizer = False
+        start = time.time()
         args = parse_args()
+        if args.visualizer:
+            visualizer = True
         function_calling = p_parser(args.input)
         functions_definition = f_parser(args.functions_definition)
         prompt_for_LLM = create_prompt(function_calling, functions_definition)
@@ -32,7 +37,12 @@ def main() -> None:
         for prompt in prompt_for_LLM:
             i += 1
             first_activate = generation(prompt, model, vocab_data,
-                                        first_activate, count, i)
+                                        first_activate, count, i, visualizer)
+        end = time.time()
+        tt_seconds = end-start
+        minutes = int(tt_seconds // 60)
+        seconds = int(tt_seconds % 60)
+        print(f"\033[38;2;0;170;0;1mTIME: {minutes}m{seconds}s\033[0m")
 
     except (ValueError, PermissionError, FileNotFoundError, KeyboardInterrupt,
             KeyError, JSONDecodeError, Exception) as e:

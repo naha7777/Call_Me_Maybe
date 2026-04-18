@@ -40,7 +40,8 @@ def json_gen(decode: list[str]) -> None:
 
 
 def generation(prompt: str, model: Small_LLM_Model, vocab_data: dict[Any, Any],
-               first_activate: bool, nb_prompts: int, i: int) -> bool:
+               first_activate: bool, nb_prompts: int, i: int,
+               visualizer: bool) -> bool:
     encode = model.encode(prompt)[0].tolist()
     states = create_states(nb_prompts, i)
     ids: list[int] = []
@@ -58,16 +59,17 @@ def generation(prompt: str, model: Small_LLM_Model, vocab_data: dict[Any, Any],
             decode = model.decode(ids)
             first_activate = True
         if state in fixed_states:
-            decode = state_fix(state, prompt, model, vocab_data, logits, ids)
+            decode = state_fix(state, prompt, model, vocab_data, logits, ids,
+                               visualizer)
         if state == "end" and state == states[-1]:
             break
         elif state == "function":
-            state_function(prompt, model, encode, ids, state, vocab_data)
+            state_function(prompt, model, encode, ids, state, vocab_data,
+                           visualizer)
         elif state == "string":
-            state_string(prompt, model, ids, vocab_data, logits)
+            state_string(prompt, model, ids, vocab_data, logits, visualizer)
         elif state == "param":
-            state_param(prompt, model, ids, vocab_data)
-    # print(decode)
+            state_param(prompt, model, ids, vocab_data, visualizer)
     SAVE_GEN.append(decode)
     if "final" in states:
         this_is_the_end = True

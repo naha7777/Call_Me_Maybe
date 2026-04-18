@@ -1,8 +1,8 @@
 <!-- -> check warning -->
 <!-- -> mettre dans .json -->
--> ajouter time
--> mypy
--> ajouter l'option visualizer
+<!-- -> ajouter time -->
+<!-- -> mypy -->
+<!-- -> ajouter l'option visualizer -->
 -> readme
 <!-- -> supprimer l'output -->
 -> le mettre sur le bon git
@@ -30,6 +30,7 @@ installation, and/or execution.
 - https://dev.to/ericlecodeur/python-manipulation-des-dossiers-et-fichiers-nji
 
 ### AI usage
+- explenations about LLM, models, tokens
 
 ## Algorithm explanation
 Describe your constrained decoding approach in detail

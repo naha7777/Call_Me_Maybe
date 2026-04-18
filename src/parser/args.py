@@ -28,4 +28,8 @@ def parse_args() -> argparse.Namespace:
                         choices=["data/output/function_calls.json"],
                         help="output_file (.json)")
 
+    parser.add_argument("--visualizer",
+                        action="store_true",
+                        help="Activate the visualizer")
+
     return parser.parse_args()

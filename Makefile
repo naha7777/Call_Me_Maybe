@@ -2,7 +2,7 @@ SRC = src/
 
 FLAGS = --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
-.PHONY: install run debug clean lint lint-strict
+.PHONY: install run debug clean lint lint-strict visu
 
 install:
 	chmod +x install_env.sh
@@ -14,6 +14,13 @@ run:
 	export TRANSFORMERS_CACHE="/goinfre/$(USER)/hf-cache" && \
 	export UV_CACHE_DIR="/goinfre/$(USER)/uv-cache" && \
 	uv run python -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json
+
+visu:
+	@clear
+	export HF_HOME="/goinfre/$(USER)/hf-cache" && \
+	export TRANSFORMERS_CACHE="/goinfre/$(USER)/hf-cache" && \
+	export UV_CACHE_DIR="/goinfre/$(USER)/uv-cache" && \
+	uv run python -m src --functions_definition data/input/functions_definition.json --input data/input/function_calling_tests.json --output data/output/function_calls.json --visualizer
 
 debug:
 	export HF_HOME="/goinfre/$(USER)/hf-cache" && \

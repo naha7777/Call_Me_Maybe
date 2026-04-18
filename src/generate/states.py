@@ -7,19 +7,20 @@ from typing import Any
 
 def state_fix(state: str, prompt: str, model: Small_LLM_Model,
               vocab_data: dict[str, int], logits: list[float],
-              ids: list[int]) -> Any:
+              ids: list[int], visualizer: bool) -> Any:
     valid_tokens = state_machine(state, prompt, model, vocab_data)
     scores = {token_id: logits[token_id] for token_id in valid_tokens}
     best_token_id = max(scores, key=lambda t: scores[t])
     ids.append(best_token_id)
     decode = model.decode(ids)
-    # print(decode)
+    if visualizer:
+        print(decode)
     return decode
 
 
 def state_function(prompt: str, model: Small_LLM_Model, encode: list[str],
                    ids: list[int], state: str,
-                   vocab_data: dict[str, int]) -> None:
+                   vocab_data: dict[str, int], visualizer: bool) -> None:
     no_boucle: list[int] = []
     functions_names = []
     split_prompt = prompt.split("\n")
@@ -51,13 +52,14 @@ def state_function(prompt: str, model: Small_LLM_Model, encode: list[str],
             break
         no_boucle.append(best_id)
         ids.append(best_id)
-    # decode = model.decode(ids)
-    # print(decode)
-    # return decode
+    if visualizer:
+        decode = model.decode(ids)
+        print(decode)
 
 
 def state_string(prompt: str, model: Small_LLM_Model, ids: list[int],
-                 vocab_data: dict[str, int], logits: list[float]) -> None:
+                 vocab_data: dict[str, int], logits: list[float],
+                 visualizer: bool) -> None:
     i = 0
     sp_pr = prompt.split("\n")
     for line in sp_pr:
@@ -79,13 +81,13 @@ def state_string(prompt: str, model: Small_LLM_Model, ids: list[int],
         else:
             ids.append(1)
             break
-    # decode = model.decode(ids)
-    # print(decode)
-    # return decode
+    if visualizer:
+        decode = model.decode(ids)
+        print(decode)
 
 
 def state_param(prompt: str, model: Small_LLM_Model, ids: list[int],
-                vocab_data: dict[str, int]) -> None:
+                vocab_data: dict[str, int], visualizer: bool) -> None:
     all_name = {}
     prompt_values = find_values(prompt)
 
@@ -136,6 +138,6 @@ def state_param(prompt: str, model: Small_LLM_Model, ids: list[int],
             i += 1
         else:
             break
-    # decode = model.decode(ids)
-    # print(decode)
-    # return decode
+    if visualizer:
+        decode = model.decode(ids)
+        print(decode)
