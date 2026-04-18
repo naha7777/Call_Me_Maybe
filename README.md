@@ -1,12 +1,5 @@
-<!-- -> check warning -->
-<!-- -> mettre dans .json -->
-<!-- -> ajouter time -->
-<!-- -> mypy -->
-<!-- -> ajouter l'option visualizer -->
 -> readme
-<!-- -> supprimer l'output -->
 -> le mettre sur le bon git
--> check le sujet d'evaluation
 
 
 _This project has been created as part of the 42 curriculum by anacharp_
@@ -49,3 +42,7 @@ Describe how you validated your implementation
 
 ## Example usage
 Provide clear examples of running your program
+
+cd moulinette
+
+uv run python -m moulinette grade_student_answers ../data/output/function_calling_results.json --correction_dir data/correction

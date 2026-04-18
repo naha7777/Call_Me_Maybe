@@ -35,17 +35,21 @@ def find_values(prompt: str) -> list[Any]:
         elif "'" in user_prompt:
             cut = user_prompt.split("'")
         first_value = cut[1]
-        sec_value = cut[2].strip(" with ")
+        third_value = cut[2].strip(" with ")
         value = cut[0].split("all")[1]
         value = value.strip(" ")
-        third_value = value.split(" ")[0].strip(" ")
+        sec_value = value.split(" ")[0].strip(" ")
+        if third_value == "asterisks":
+            third_value = "*"
+        if sec_value == "vowels":
+            sec_value = "[aeiouAEIOU]"
         prompt_values.append(first_value)
         prompt_values.append(sec_value)
         prompt_values.append(third_value)
     elif "Substitute" in user_prompt:
         divide = user_prompt.split("'")
-        third_value = divide[1].strip("'")
-        second_value = divide[3].strip("'")
+        second_value = divide[1].strip("'")
+        third_value = divide[3].strip("'")
         first2_value = divide[5].strip("'")
         prompt_values.append(first2_value)
         prompt_values.append(second_value)
