@@ -3,7 +3,7 @@ from typing import Any
 
 def find_values(prompt: str) -> list[Any]:
     user_prompt = ""
-    prompt_values = []
+    prompt_values: list[Any] = []
     for line in prompt.split("\n"):
         if "Input" in line:
             user_prompt = line.split(":", 1)[1].strip().strip("'").strip('"')
@@ -14,40 +14,40 @@ def find_values(prompt: str) -> list[Any]:
             if c.isdigit():
                 value += c
         other_value = search_values[1].strip("?").strip(" ")
-        first_value = float(value)
-        second_value = float(other_value)
-        prompt_values.append(first_value)
-        prompt_values.append(second_value)
+        f_value = float(value)
+        s_value = float(other_value)
+        prompt_values.append(f_value)
+        prompt_values.append(s_value)
     elif "Greet" in user_prompt:
-        first_value = ""
-        first_value += user_prompt.split(" ")[1]
-        prompt_values.append(first_value)
+        fi_value = ""
+        fi_value += user_prompt.split(" ")[1]
+        prompt_values.append(fi_value)
     elif "Reverse" in user_prompt:
-        first_value = user_prompt.split("'")[1].strip("'")
-        prompt_values.append(first_value)
+        fir_value = user_prompt.split("'")[1].strip("'")
+        prompt_values.append(fir_value)
     elif "root" in user_prompt:
         value = user_prompt.split("of")[1].strip(" ").strip("?")
-        first_value = float(value)
-        prompt_values.append(first_value)
+        firs_value = float(value)
+        prompt_values.append(firs_value)
     elif "Replace" in user_prompt:
         if '"' in user_prompt:
             cut = user_prompt.split('"')
         elif "'" in user_prompt:
             cut = user_prompt.split("'")
         first_value = cut[1]
-        second_value = cut[2].strip(" with ")
+        sec_value = cut[2].strip(" with ")
         value = cut[0].split("all")[1]
         value = value.strip(" ")
         third_value = value.split(" ")[0].strip(" ")
         prompt_values.append(first_value)
-        prompt_values.append(second_value)
+        prompt_values.append(sec_value)
         prompt_values.append(third_value)
     elif "Substitute" in user_prompt:
         divide = user_prompt.split("'")
         third_value = divide[1].strip("'")
         second_value = divide[3].strip("'")
-        first_value = divide[5].strip("'")
-        prompt_values.append(first_value)
+        first2_value = divide[5].strip("'")
+        prompt_values.append(first2_value)
         prompt_values.append(second_value)
         prompt_values.append(third_value)
     else:

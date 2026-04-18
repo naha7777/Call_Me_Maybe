@@ -27,11 +27,6 @@ def main() -> None:
             first_activate = generation(prompt, model, vocab_data,
                                         first_activate, count, i)
 
-        # if not exists("data/output"):
-        #     os.mkdir("data/output")
-        # with open("data/output/function_calling_results.json", "w") as f:
-        #     json.dump(string, f, indent=4)
-
     except (ValueError, PermissionError, FileNotFoundError, KeyboardInterrupt,
             KeyError, JSONDecodeError, Exception) as e:
         print(f"\033[38;2;170;0;0;1mERROR: {e}\033[0m")

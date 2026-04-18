@@ -1,14 +1,15 @@
 from llm_sdk.__init__ import Small_LLM_Model
+from typing import Any
 
 
 def state_machine(state: str, prompt: str, model: Small_LLM_Model,
-                  vocab_data: dict[str, int]) -> list:
+                  vocab_data: dict[Any, Any]) -> list[int]:
     if state == "start":
         return ([vocab_data["{"]])
     elif state == "first":
         return ([vocab_data["["]])
     elif state == "final":
-        return ([vocab_data["}]"]])
+        return ([vocab_data["]"]])
     elif state == "quotation_marks":
         return ([vocab_data['"']])
     elif state == "prompt":

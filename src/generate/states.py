@@ -7,7 +7,7 @@ from typing import Any
 
 def state_fix(state: str, prompt: str, model: Small_LLM_Model,
               vocab_data: dict[str, int], logits: list[float],
-              ids: list[int]) -> str:
+              ids: list[int]) -> Any:
     valid_tokens = state_machine(state, prompt, model, vocab_data)
     scores = {token_id: logits[token_id] for token_id in valid_tokens}
     best_token_id = max(scores, key=lambda t: scores[t])
@@ -56,8 +56,8 @@ def state_function(prompt: str, model: Small_LLM_Model, encode: list[str],
     # return decode
 
 
-def state_string(prompt: str, ids: list[int], vocab_data: dict[str, int],
-                 logits: list[float]) -> None:
+def state_string(prompt: str, model: Small_LLM_Model, ids: list[int],
+                 vocab_data: dict[str, int], logits: list[float]) -> None:
     i = 0
     sp_pr = prompt.split("\n")
     for line in sp_pr:
@@ -69,6 +69,8 @@ def state_string(prompt: str, ids: list[int], vocab_data: dict[str, int],
             c = s[i]
             if c == " ":
                 valid_tokens = [220]
+            elif c == '"':
+                valid_tokens = [vocab_data["'"]]
             else:
                 valid_tokens = [vocab_data[c]]
             best_id = max({t: logits[t] for t in valid_tokens})
@@ -97,8 +99,8 @@ def state_param(prompt: str, model: Small_LLM_Model, ids: list[int],
 
     i = 0
     if "," in function_parameters:
-        function_parameters = function_parameters.split(",")
-        for f in function_parameters:
+        funct_parameters = function_parameters.split(",")
+        for f in funct_parameters:
             s_p = f.split("(")
             all_name[s_p[0].strip(" ")] = prompt_values[i]
             i += 1
@@ -121,6 +123,7 @@ def state_param(prompt: str, model: Small_LLM_Model, ids: list[int],
             params += f'"{name}": {formatted_value}, '
         i += 1
 
+    params += "}"
     i = 0
     while True:
         if i < len(params):

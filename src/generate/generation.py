@@ -2,6 +2,13 @@ from llm_sdk.__init__ import Small_LLM_Model
 from src.generate.states import state_fix, state_function
 from src.generate.states import state_param, state_string
 from src.generate.state_machine import state_machine
+from typing import Any
+import json
+import os
+from pathlib import Path
+
+
+SAVE_GEN = []
 
 
 def create_states(nb_prompts: int, i: int) -> list[str]:
@@ -23,13 +30,23 @@ def create_states(nb_prompts: int, i: int) -> list[str]:
                  "start", "param", "end", "comma"])
 
 
-def generation(prompt: str, model: Small_LLM_Model, vocab_data: str,
+def json_gen(decode: list[str]) -> None:
+    if not Path("data/output").exists():
+        os.mkdir("data/output")
+    full_string = "".join(decode).strip()
+    data = json.loads(full_string)
+    with open("data/output/function_calling_results.json", "w") as f:
+        json.dump(data, f, indent=4)
+
+
+def generation(prompt: str, model: Small_LLM_Model, vocab_data: dict[Any, Any],
                first_activate: bool, nb_prompts: int, i: int) -> bool:
     encode = model.encode(prompt)[0].tolist()
     states = create_states(nb_prompts, i)
     ids: list[int] = []
     fixed_states = ["start", "quotation_marks", "prompt", "two_points",
                     "space", "comma", "name", "parameters", "end", "final"]
+    this_is_the_end = False
 
     logits = model.get_logits_from_input_ids(encode+ids)
     for state in states:
@@ -47,8 +64,13 @@ def generation(prompt: str, model: Small_LLM_Model, vocab_data: str,
         elif state == "function":
             state_function(prompt, model, encode, ids, state, vocab_data)
         elif state == "string":
-            state_string(prompt, ids, vocab_data, logits)
+            state_string(prompt, model, ids, vocab_data, logits)
         elif state == "param":
             state_param(prompt, model, ids, vocab_data)
-    print(decode)
+    # print(decode)
+    SAVE_GEN.append(decode)
+    if "final" in states:
+        this_is_the_end = True
+    if this_is_the_end:
+        json_gen(SAVE_GEN)
     return True
